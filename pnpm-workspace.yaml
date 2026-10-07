@@ -67,15 +67,19 @@ overrides:
   postcss: 8.5.23
   # JUSTIFICATION: Fixes GHSA-f88m-g3jw-g9cj — sharp inherits several libvips CVEs
   # (CVE-2026-33327/33328/35590/35591) — plus GHSA-rgj7-g3m4-5g8c (2026-09-11), which bundles the
-  # libheif flaws GHSA-g89c-p67h-r497 / GHSA-2jg2-4ch7-h545 and needs >=0.35.4, above the previous
-  # 0.35.0 pin. Transitive via packages/nextjs and samples/nextjs/quickstart's `next` > `sharp`
-  # (Next.js image optimization).
-  sharp: 0.35.4
-  # JUSTIFICATION: Fixes GHSA-395f-4hp3-45gv — quadratic-complexity DoS in shell-quote's `parse()`.
-  # Transitive via packages/nuxt's `@nuxt/devtools` > `launch-editor` > `shell-quote`. Note the
-  # advisory's own "patched" floor (>=1.8.5) is stale — 1.8.5 was never published; 1.10.0 is the
-  # first published fix.
-  shell-quote: 1.10.0
+  # libheif flaws GHSA-g89c-p67h-r497 / GHSA-2jg2-4ch7-h545 and needs >=0.35.4, plus
+  # GHSA-wq5f-xc86-pv6w (2026-10-07), a librsvg flaw (CVE-2026-96889) that needs >=0.35.5, above the
+  # previous 0.35.4 pin. Transitive via packages/nextjs and samples/nextjs/quickstart's `next` >
+  # `sharp` (Next.js image optimization). `next`@15.5.27 already permits ^0.35.4, so the pin only
+  # has to move the lockfile forward.
+  sharp: 0.35.5
+  # JUSTIFICATION: Fixes GHSA-395f-4hp3-45gv — quadratic-complexity DoS in shell-quote's `parse()`,
+  # plus GHSA-pqg4-j6r4-53mv (2026-10-07), command injection in `quote()` through a line terminator
+  # in a token after a `{ comment }` token, which needs >=1.11.0, above the previous 1.10.0 pin.
+  # Transitive via packages/nuxt's `@nuxt/devtools` > `launch-editor` > `shell-quote`.
+  # `launch-editor`@latest still declares `shell-quote: ^1.10.0`, which permits 1.12.0, so the pin
+  # only has to move the lockfile forward.
+  shell-quote: 1.12.0
   # JUSTIFICATION: Fixes GHSA-68fv-2mgg-jv7q — source-map-js event-loop DoS through indexed
   # source-map section offsets. Transitive via `postcss`, `@vue/compiler-core`, `css-tree` and
   # `magicast` across the vitest/vite/nuxt toolchains. Their ranges already permit 1.2.2; the
